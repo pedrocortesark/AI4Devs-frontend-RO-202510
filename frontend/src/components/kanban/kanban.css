@@ -1,0 +1,421 @@
+/* kanban.css - Styles for Kanban board components */
+
+/* ============================================
+   ANIMATIONS & TRANSITIONS
+   ============================================ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================
+   MOBILE-FIRST LAYOUT
+   ============================================ */
+.kanban-board {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  min-height: 500px;
+  padding: 0.5rem;
+}
+
+/* Tablet: Better spacing (576px+) */
+@media (min-width: 576px) {
+  .kanban-board {
+    gap: 1rem;
+    padding: 0.75rem;
+  }
+}
+
+/* Desktop: More spacing (992px+) */
+@media (min-width: 992px) {
+  .kanban-board {
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+}
+
+/* Large Desktop: Maximum spacing (1200px+) */
+@media (min-width: 1200px) {
+  .kanban-board {
+    gap: 2rem;
+  }
+}
+
+/* Kanban Column Styles */
+.kanban-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 280px;
+  max-width: 400px;
+  margin-bottom: 1rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.kanban-column .card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.kanban-column .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.kanban-column .card-header {
+  transition: background-color 0.2s ease;
+}
+
+/* Mobile: Reduce hover effects for touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .kanban-column .card:hover {
+    transform: none;
+  }
+}
+
+/* Droppable Area */
+.droppable-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 200px;
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+
+/* Mobile: Adjust padding and min-height */
+@media (max-width: 575px) {
+  .droppable-area {
+    min-height: 150px;
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+}
+
+/* Candidate Card Styles */
+.candidate-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: grab;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-height: 80px;
+  animation: fadeIn 0.4s ease-out;
+  animation-fill-mode: both;
+  background-color: #f8f9fa;
+}
+
+.candidate-card:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  border-color: rgba(0, 123, 255, 0.5);
+}
+
+.candidate-card:active {
+  cursor: grabbing;
+}
+
+/* Mobile: Adjust for touch interactions */
+@media (hover: none) and (pointer: coarse) {
+  .candidate-card {
+    min-height: 88px; /* Larger touch targets for mobile */
+    cursor: default;
+  }
+
+  .candidate-card:hover {
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Dragging State */
+.candidate-card.dragging {
+  opacity: 0.5;
+  transform: rotate(2deg) scale(1.02);
+  z-index: 1000;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Drag Overlay */
+.drag-overlay {
+  z-index: 999;
+}
+
+/* Empty State */
+.kanban-column .empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #6c757d;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.kanban-column .empty-state svg {
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+/* Loading States */
+.kanban-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+.kanban-loading .spinner-border {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+}
+
+/* Mobile: Adjust loading state */
+@media (max-width: 575px) {
+  .kanban-loading {
+    min-height: 250px;
+    padding: 1rem;
+  }
+
+  .kanban-loading .spinner-border {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+/* Header Styles */
+.kanban-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.kanban-header h1 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+/* Mobile: Adjust header for smaller screens */
+@media (max-width: 575px) {
+  .kanban-header {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+  }
+
+  .kanban-header h1 {
+    font-size: 1.1rem;
+  }
+
+  .droppable-area {
+    min-height: 150px;
+    padding: 0.25rem;
+  }
+
+  .candidate-card .card-body {
+    padding: 0.75rem;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .kanban-column .card,
+  .candidate-card,
+  .candidate-card:hover {
+    transition: none;
+  }
+}
+
+/* Focus States */
+.candidate-card:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .kanban-column .card-body {
+    background-color: #f8f9fa;
+  }
+
+  .candidate-card {
+    background-color: #f8f9fa;
+    border-color: rgba(0, 0, 0, 0.125);
+  }
+
+  .candidate-card .text-muted {
+    color: #6c757d !important;
+  }
+}
+
+/* ============================================
+   SKELETON LOADING SCREENS
+   ============================================ */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 0%,
+    #e0e0e0 50%,
+    #f0f0f0 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.skeleton-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.skeleton-header {
+  height: 16px;
+  width: 70%;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-text {
+  height: 12px;
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
+
+.skeleton-text.short {
+  width: 60%;
+}
+
+.skeleton-column {
+  animation: slideInFromLeft 0.3s ease-out;
+}
+
+/* ============================================
+   TOAST NOTIFICATIONS (React-Bootstrap)
+   ============================================ */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.toast {
+  animation: slideInFromLeft 0.3s ease-out;
+}
+
+.toast.bg-success {
+  background-color: #28a745 !important;
+}
+
+.toast.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+/* Mobile: Adjust toast position */
+@media (max-width: 575px) {
+  .toast-container {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+  }
+}
+
+/* ============================================
+   IMPROVED EMPTY STATES
+   ============================================ */
+.empty-state-enhanced {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: #6c757d;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.empty-state-enhanced .icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.6;
+}
+
+.empty-state-enhanced .title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #495057;
+}
+
+.empty-state-enhanced .description {
+  font-size: 0.9rem;
+  color: #6c757d;
+  max-width: 280px;
+}
+
+/* Mobile: Adjust empty state for smaller screens */
+@media (max-width: 575px) {
+  .empty-state-enhanced {
+    padding: 2rem 0.5rem;
+  }
+
+  .empty-state-enhanced .icon {
+    font-size: 2.5rem;
+  }
+}
+
+/* ============================================
+   PERFORMANCE: Hardware Acceleration
+   ============================================ */
+.candidate-card,
+.kanban-column .card {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Staggered animation for cards */
+.candidate-card:nth-child(1) { animation-delay: 0.05s; }
+.candidate-card:nth-child(2) { animation-delay: 0.1s; }
+.candidate-card:nth-child(3) { animation-delay: 0.15s; }
+.candidate-card:nth-child(4) { animation-delay: 0.2s; }
+.candidate-card:nth-child(5) { animation-delay: 0.25s; }
+.candidate-card:nth-child(n+6) { animation-delay: 0.3s; }

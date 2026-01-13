@@ -27,6 +27,7 @@
 ### Framework y Librerías
 - **React**: 18+ con Create React App
 - **React Bootstrap**: Componentes UI responsivos
+- **@dnd-kit/core**: Librería moderna para Drag & Drop (recomendada para Vista Kanban)
 - **Axios**: Cliente HTTP para API calls (implícito en services)
 
 ### Build y Desarrollo

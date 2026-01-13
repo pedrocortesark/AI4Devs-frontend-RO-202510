@@ -16,11 +16,14 @@ export const uploadCV = async (file) => {
     }
 };
 
-export const sendCandidateData = async (candidateData) => {
+export const updateCandidateStage = async (candidateId, applicationId, currentInterviewStep) => {
     try {
-        const response = await axios.post('http://localhost:3010/candidates', candidateData);
+        const response = await axios.put(`http://localhost:3010/candidates/${candidateId}`, {
+            applicationId,
+            currentInterviewStep
+        });
         return response.data;
     } catch (error) {
-        throw new Error('Error al enviar datos del candidato:', error.response.data);
+        throw new Error('Error updating candidate stage:', error.response?.data || error.message);
     }
 };

@@ -69,6 +69,39 @@ Application (1) --> (*) Interview
 - **Component-Based Architecture**: Reutilización de componentes
 - **Service Layer**: Abstracción de llamadas API
 
+### Vista Kanban de Posiciones (Nueva Implementación)
+**Jerarquía de Componentes**:
+```
+PositionKanban (Página Principal)
+├── Header
+│   ├── BackButton (navegación a listado)
+│   └── PositionTitle (título dinámico)
+├── KanbanBoard
+│   ├── Column (por cada interviewStep)
+│   │   ├── ColumnHeader (nombre del paso)
+│   │   └── DroppableArea
+│   │       └── CandidateCard (arrastrable)
+│   │           ├── CandidateName
+│   │           └── AverageScore (indicador visual)
+```
+
+**Integración de Servicios API**:
+- **positionService.ts**: 
+  - `getInterviewFlow(positionId)` → Obtiene columnas dinámicas
+  - `getCandidatesByPosition(positionId)` → Lista inicial de candidatos
+- **candidateService.ts**:
+  - `updateCandidateStage(candidateId, applicationId, newStepId)` → Persiste movimientos
+
+**Patrones de Estado**:
+- **Optimistic UI**: Actualización inmediata local, rollback en error de API
+- **State Management**: useState local para board state, sincronización con backend
+- **Error Handling**: Toast notifications para fallos de Drag & Drop
+
+**Patrones de Layout**:
+- **Responsive Design**: CSS Grid (desktop horizontal), Flexbox stack (mobile vertical)
+- **Drag & Drop**: @dnd-kit/core para funcionalidad core (moderna y accesible)
+- **Accessibility**: ARIA labels, keyboard navigation support
+
 ## Base de Datos y Persistencia
 
 ### ORM: Prisma con PostgreSQL
